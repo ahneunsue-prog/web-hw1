@@ -2,7 +2,7 @@
 /* 구글 글꼴 */
 @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700&display=swap');
 
-/* 기본 색상과 글꼴 변수 */
+/* 색상, 글꼴, 간격 변수 */
 :root {
   --bg: #141e30;
   --surface: #1f2b44;
@@ -12,6 +12,9 @@
   --muted: #b8c4d6;
   --gold: #ffd54f;
   --success: #62d99b;
+  --shadow: rgba(255, 213, 79, 0.35);
+  --overlay-top: rgba(0, 0, 0, 0.65);
+  --overlay-bottom: rgba(0, 0, 0, 0.85);
 
   --font-title: "Black Han Sans", sans-serif;
   --font-body: "Noto Sans KR", sans-serif;
@@ -30,6 +33,7 @@ html {
 
 body {
   margin: 0;
+  min-width: 0;
   background-color: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
@@ -43,11 +47,12 @@ h3 {
   font-weight: normal;
 }
 
-/* 상단 메뉴 */
+/* 상단 헤더와 내비게이션 */
 .top {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   gap: var(--gap);
   padding: 20px 30px;
   background-color: var(--surface);
@@ -73,19 +78,19 @@ nav a {
   font-weight: bold;
 }
 
-nav a:hover {
+nav a:hover,
+nav a:focus-visible {
   color: var(--accent);
 }
 
-/* 메인 화면 스파이더맨 배경 */
+/* 메인 히어로 영역 */
 .hero {
   padding: 80px 20px;
   text-align: center;
-
   background:
     linear-gradient(
-      rgba(0, 0, 0, 0.65),
-      rgba(0, 0, 0, 0.8)
+      var(--overlay-top),
+      var(--overlay-bottom)
     ),
     url("https://image.tmdb.org/t/p/w1280/jenQoCLJ4FEfFGZS13op91jlxjy.jpg")
     center / cover no-repeat;
@@ -121,25 +126,24 @@ main {
 }
 
 .basis {
-  color: var(--muted);
   margin-bottom: 20px;
+  color: var(--muted);
 }
 
-/* 영화 카드 배치 */
+/* 영화 카드 그리드: 모바일 기본 1열 */
 .board {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--gap);
 }
 
-/* 영화 카드 */
+/* 영화 카드와 마우스 호버 효과 */
 .card {
   position: relative;
   min-width: 0;
   overflow: hidden;
   background-color: var(--surface);
   border-radius: 12px;
-
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease;
@@ -147,7 +151,7 @@ main {
 
 .card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 8px 24px rgba(255, 215, 0, 0.35);
+  box-shadow: 0 8px 24px var(--shadow);
 }
 
 /* 영화 포스터 */
@@ -159,33 +163,35 @@ main {
   object-fit: cover;
 }
 
-/* 영화 평점 */
+/* 영화 평점 배지: 오른쪽 위 */
 .badge {
   position: absolute;
   top: 10px;
   right: 10px;
+  z-index: 1;
   padding: 6px 10px;
   background-color: var(--bg);
   color: var(--gold);
   border-radius: 8px;
+  font-size: 14px;
   font-weight: bold;
-  z-index: 1;
 }
 
-/* 박스오피스 순위 */
+/* 박스오피스 순위 배지: 왼쪽 위 */
 .rank {
   position: absolute;
   top: 10px;
   left: 10px;
+  z-index: 1;
   padding: 6px 12px;
   background-color: var(--warn);
   color: var(--text);
   border-radius: 8px;
+  font-size: 14px;
   font-weight: bold;
-  z-index: 1;
 }
 
-/* 영화 정보 */
+/* 영화 카드 정보 */
 .info {
   padding: 15px;
 }
@@ -205,10 +211,13 @@ main {
 .audience {
   font-size: 14px;
   line-height: 1.7;
+  overflow-wrap: anywhere;
 }
 
-/* 순위 변동 표시 */
+/* 박스오피스 순위 변동 */
 .change {
+  margin-top: 10px;
+  color: var(--muted);
   font-size: 14px;
   font-weight: bold;
 }
@@ -237,7 +246,7 @@ main {
   content: "NEW ";
 }
 
-/* 포스터가 없을 때 */
+/* 포스터가 없을 때 대체 이미지 영역 */
 .card.no-poster .poster-fallback {
   display: flex;
   justify-content: center;
@@ -254,23 +263,22 @@ main {
   text-align: center;
 }
 
-/* 상세 페이지 스파이더맨 배경 */
+/* 영화 상세 페이지 배경 */
 .detail-page {
   min-height: 100vh;
-
   background:
     linear-gradient(
-      rgba(0, 0, 0, 0.8),
-      rgba(0, 0, 0, 0.9)
+      var(--overlay-top),
+      var(--overlay-bottom)
     ),
     url("https://image.tmdb.org/t/p/w1280/jenQoCLJ4FEfFGZS13op91jlxjy.jpg")
-    center / cover fixed no-repeat;
+    center / cover no-repeat;
 }
 
-/* 상세 페이지 */
+/* 상세 페이지 콘텐츠: 모바일 기본 1열 */
 .detail {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 30px;
   margin-top: 30px;
   padding: 25px;
@@ -285,6 +293,7 @@ main {
 
 .detail dl {
   margin: 0;
+  min-width: 0;
 }
 
 .detail dt {
@@ -309,7 +318,7 @@ main {
   text-decoration: underline;
 }
 
-/* 하단 출처 */
+/* 하단 출처 및 저작권 안내 */
 footer {
   padding: 30px 20px;
   text-align: center;
@@ -325,14 +334,25 @@ footer a {
   color: var(--accent);
 }
 
-/* 태블릿: 2열 */
-@media (max-width: 1023px) {
+/* 태블릿: 600px 이상 2열 */
+@media (min-width: 600px) {
   .board {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .detail {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  }
 }
 
-/* 모바일: 1열 */
+/* 데스크톱: 1024px 이상 4열 */
+@media (min-width: 1024px) {
+  .board {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* 작은 모바일 화면의 글자와 여백 조정 */
 @media (max-width: 599px) {
   .top {
     flex-direction: column;
@@ -369,20 +389,7 @@ footer a {
     font-size: 23px;
   }
 
-  .board {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .card {
-    min-width: 0;
-  }
-
   .detail {
-    grid-template-columns: 1fr;
     padding: 15px;
-  }
-
-  .detail .poster {
-    max-width: 100%;
   }
 }
